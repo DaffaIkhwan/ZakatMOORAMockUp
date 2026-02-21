@@ -39,7 +39,8 @@ export default function App() {
   };
 
   const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USER);
-  const [isLoading, setIsLoading] = useState(false);
+  const isStaticMode = typeof window !== 'undefined' && (window.location.search.includes('figma=true') || window.location.search.includes('static=true'));
+  const [isLoading, setIsLoading] = useState(!isStaticMode);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [authView, setAuthView] = useState<'login' | 'register'>('login');

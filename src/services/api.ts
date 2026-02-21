@@ -143,7 +143,12 @@ const MOCK_DATA = {
 };
 
 // HELPER FOR ASYNC MOCKING
-const mockDelay = <T>(data: T): Promise<T> => new Promise(resolve => setTimeout(() => resolve(data), 300));
+const isStaticMode = typeof window !== 'undefined' && (window.location.search.includes('figma=true') || window.location.search.includes('static=true'));
+
+const mockDelay = <T>(data: T): Promise<T> => {
+    if (isStaticMode) return Promise.resolve(data);
+    return new Promise(resolve => setTimeout(() => resolve(data), 300));
+};
 
 export const api = {
     login: async (credentials: any) => mockDelay({ token: 'mock-token', user: MOCK_DATA.users[0] }),
