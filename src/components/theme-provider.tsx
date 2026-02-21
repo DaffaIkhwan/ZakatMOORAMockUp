@@ -26,9 +26,16 @@ export function ThemeProvider({
     defaultTheme = "system",
     storageKey = "vite-ui-theme",
 }: ThemeProviderProps) {
-    const [theme, setTheme] = useState<Theme>(
-        () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-    )
+    const [theme, setTheme] = useState<Theme>(() => {
+        if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const forcedTheme = urlParams.get('theme') as Theme;
+            if (forcedTheme === 'dark' || forcedTheme === 'light') return forcedTheme;
+            // Always dark if figma mode is on and no explicit theme
+            if (urlParams.get('figma') === 'true') return 'dark';
+        }
+        return (localStorage.getItem(storageKey) as Theme) || defaultTheme;
+    })
 
     useEffect(() => {
         const root = window.document.documentElement

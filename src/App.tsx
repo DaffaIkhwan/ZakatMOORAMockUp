@@ -38,11 +38,30 @@ export default function App() {
     createdAt: new Date().toISOString()
   };
 
-  const [currentUser, setCurrentUser] = useState<User | null>(MOCK_USER);
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const role = urlParams.get('role');
+      if (role && ['super_admin', 'manajer', 'surveyor', 'mustahik'].includes(role)) {
+        return { ...MOCK_USER, role: role as any, name: `Mock ${role}` };
+      }
+    }
+    return MOCK_USER;
+  });
+
   const isStaticMode = typeof window !== 'undefined' && (window.location.search.includes('figma=true') || window.location.search.includes('static=true'));
   const [isLoading, setIsLoading] = useState(!isStaticMode);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
-  const [activeTab, setActiveTab] = useState('dashboard');
+
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab');
+      if (tab) return tab;
+    }
+    return 'dashboard';
+  });
+
   const [authView, setAuthView] = useState<'login' | 'register'>('login');
 
   // Criteria State (Restored)
