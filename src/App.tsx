@@ -314,7 +314,7 @@ export default function App() {
           onLogout={handleLogout}
         />
 
-        <main className="container mx-auto px-4 mt-24 pb-8 space-y-6 max-w-7xl animate-in fade-in zoom-in-95 duration-500 relative z-0 isolate">
+        <main className={`container mx-auto px-4 mt-24 pb-8 space-y-6 max-w-7xl relative z-0 isolate ${isStaticMode ? '' : 'animate-in fade-in zoom-in-95 duration-500'}`}>
 
           {activeTab === 'dashboard' && can('view_dashboard') && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
